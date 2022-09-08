@@ -1,0 +1,14 @@
+title SPA New Note
+
+note over browser:
+browser sends the note to the server
+and also displays it on the page
+end note
+
+browser->server: HTTP POST /exampleapp/new_note_spa
+server-->browser: HTTP Status Code 201 - Created, {"message":"note created"}
+
+note over browser:
+server gets the note, saves it
+sends back a confirmation message
+end note

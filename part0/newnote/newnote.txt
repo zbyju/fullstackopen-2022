@@ -1,0 +1,34 @@
+title New note
+
+browser->server: HTTP POST /exampleapp/new_note
+server-->browser: HTTP Status code 302 - Redirect /exampleapp/notes
+
+note over server:
+server creates the newly added note
+end note
+
+note over browser:
+browser gets redirected to the same page
+(essentially refreshing the page)
+end note
+
+browser->server: HTTP GET /exampleapp/notes
+server-->browser: HTTP Status Code 200 - Ok
+browser->server: HTTP GET /exampleapp/main.css
+server-->browser: HTTP Status Code 200 - Ok
+browser->server: HTTP GET /exampleapp/main.js
+server-->browser: HTTP Status Code 200 - Ok
+
+note over browser:
+browser gets all of the files
+starts executing the JavaScript
+which causes it to send a request for the data
+end note
+
+browser->server: HTTP GET /exampleapp/data.json
+server-->browser: HTTP Status Code 200 - Ok, [{...}, {...}, ...]
+
+note over browser:
+browser gets the data
+and display them on the page
+end note

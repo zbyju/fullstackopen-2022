@@ -1,0 +1,22 @@
+title SPA
+
+browser->server: HTTP GET /exampleapp/spa
+server-->browser: HTTP Status Code 200 - Ok
+browser->server: HTTP GET /exampleapp/main.css
+server-->browser: HTTP Status Code 200 - Ok
+browser->server: HTTP GET /exampleapp/spa.js
+server-->browser: HTTP Status Code 200 - Ok
+
+note over browser:
+browser gets all of the files
+starts executing the JavaScript
+which causes it to send a request for the data
+end note
+
+browser->server: HTTP GET /exampleapp/data.json
+server-->browser: HTTP Status Code 200 - Ok, [{...}, {...}, ...]
+
+note over browser:
+browser gets the data
+and display them on the page
+end note
