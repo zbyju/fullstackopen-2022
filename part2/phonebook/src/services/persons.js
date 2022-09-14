@@ -12,9 +12,15 @@ const postPersons = (person) => {
   return res.then((res) => res.data);
 };
 
+const deletePersons = (id) => {
+  const res = axios.delete(baseApiUrl + "/persons/" + id);
+  return res.then((res) => res.data);
+};
+
 const PersonsService = {
   getPersons,
   postPersons,
+  deletePersons,
 };
 
 export default PersonsService;

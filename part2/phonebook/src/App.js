@@ -30,6 +30,14 @@ const App = () => {
     setFilter(event.target.value);
   };
 
+  const handleDeleteClick = (person) => {
+    if (window.confirm("Do you really want to delete " + person.name))
+      PersonsService.deletePersons(person.id).then((_) => {
+        const newPersons = persons.filter((p) => p.id !== person.id);
+        setPersons(newPersons);
+      });
+  };
+
   const filterPersons = (filter) => {
     return persons.filter((person) =>
       person.name.toLowerCase().includes(filter)
@@ -70,7 +78,7 @@ const App = () => {
         onNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={filtered} />
+      <Persons persons={filtered} onDelete={handleDeleteClick} />
     </div>
   );
 };
