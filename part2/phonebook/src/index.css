@@ -14,3 +14,8 @@
     border-color: green;
     color: green;
 }
+
+.notification.error {
+    border-color: red;
+    color: red;
+}

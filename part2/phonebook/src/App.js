@@ -76,15 +76,23 @@ const App = () => {
           name: newName,
           number: newNumber,
         };
-        PersonsService.putPersons(newPerson).then((data) => {
-          const newPersons = persons.map((p) => {
-            if (p.id !== existingPerson.id) return p;
-            return data;
+        PersonsService.putPersons(newPerson)
+          .then((data) => {
+            const newPersons = persons.map((p) => {
+              if (p.id !== existingPerson.id) return p;
+              return data;
+            });
+            setPersons(newPersons);
+            setNewName("");
+            setNumber("");
+          })
+          .catch((err) => {
+            setPersons(persons.filter((p) => p.id !== existingPerson.id));
+            showNotification({
+              text: newName + " has already been deleted",
+              type: "error",
+            });
           });
-          setPersons(newPersons);
-          setNewName("");
-          setNumber("");
-        });
       }
     } else {
       const newPerson = {
