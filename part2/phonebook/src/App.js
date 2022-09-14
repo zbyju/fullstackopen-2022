@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+
+import "./index.css";
 
 import Filter from "./Filter";
 import PersonForm from "./PersonForm";
 import Persons from "./Persons";
+import Notification from "./Notification";
 import PersonsService from "./services/persons";
 
 const App = () => {
@@ -11,6 +13,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [notification, setNotification] = useState(undefined);
 
   useEffect(() => {
     PersonsService.getPersons().then((persons) => {
@@ -45,6 +48,11 @@ const App = () => {
   };
 
   const filtered = filter === "" ? persons : filterPersons(filter);
+
+  const showNotification = (notification, time = 5000) => {
+    setNotification(notification);
+    setTimeout(() => setNotification(undefined), time);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -86,6 +94,7 @@ const App = () => {
 
       PersonsService.postPersons(newPerson).then((person) => {
         setPersons(persons.concat(person));
+        showNotification({ text: "Added " + person.name, type: "success" });
         setNewName("");
         setNumber("");
       });
@@ -95,6 +104,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification notification={notification} />
       <Filter value={filter} onChange={handleFilterChange} />
       <h3>Add new</h3>
       <PersonForm
