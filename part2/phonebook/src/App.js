@@ -49,20 +49,47 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (persons.findIndex((person) => person.name === newName) !== -1) {
-      return alert(newName + " is already added to the phonebook.");
+    const existingPerson = persons.find((person) => person.name === newName);
+    if (existingPerson !== undefined) {
+      // Person exists and the new number is the same as the one in db
+      if (existingPerson.number === newNumber)
+        return alert(newName + " is already added to the phonebook.");
+
+      // Person already exists but has different number
+      // Update the number in the db?
+      if (
+        window.confirm(
+          existingPerson.name +
+            " is already in the database, do you want to replace the number?"
+        )
+      ) {
+        const newPerson = {
+          id: existingPerson.id,
+          name: newName,
+          number: newNumber,
+        };
+        PersonsService.putPersons(newPerson).then((data) => {
+          const newPersons = persons.map((p) => {
+            if (p.id !== existingPerson.id) return p;
+            return data;
+          });
+          setPersons(newPersons);
+          setNewName("");
+          setNumber("");
+        });
+      }
+    } else {
+      const newPerson = {
+        name: newName,
+        number: newNumber,
+      };
+
+      PersonsService.postPersons(newPerson).then((person) => {
+        setPersons(persons.concat(person));
+        setNewName("");
+        setNumber("");
+      });
     }
-
-    const newPerson = {
-      name: newName,
-      number: newNumber,
-    };
-
-    PersonsService.postPersons(newPerson).then((person) => {
-      setPersons(persons.concat(person));
-      setNewName("");
-      setNumber("");
-    });
   };
 
   return (
