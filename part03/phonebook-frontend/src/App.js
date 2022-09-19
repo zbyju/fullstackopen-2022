@@ -77,7 +77,7 @@ const App = () => {
           number: newNumber,
         };
         PersonsService.putPersons(newPerson)
-          .then(({ person: data }) => {
+          .then((data) => {
             const newPersons = persons.map((p) => {
               if (p.id !== existingPerson.id) return p;
               return data;
@@ -100,7 +100,7 @@ const App = () => {
         number: newNumber,
       };
 
-      PersonsService.postPersons(newPerson).then(({ person }) => {
+      PersonsService.postPersons(newPerson).then((person) => {
         setPersons(persons.concat(person));
         showNotification({ text: "Added " + person.name, type: "success" });
         setNewName("");
