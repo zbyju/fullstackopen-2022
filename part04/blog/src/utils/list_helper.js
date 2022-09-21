@@ -9,8 +9,16 @@ const favoriteBlog = (blogs) => {
   }, blogs[0]);
 };
 
+const blogsOfAuthor = (author, blogs) => {
+  return blogs.filter((blog) => blog.author === author);
+};
+
 const countBlogsOfAuthor = (author, blogs) => {
-  return blogs.filter((blog) => blog.author === author).length;
+  return blogsOfAuthor(author, blogs).length;
+};
+
+const likesOfAuthor = (author, blogs) => {
+  return totalLikes(blogsOfAuthor(author, blogs));
 };
 
 const allAuthors = (blogs) => {
@@ -28,9 +36,21 @@ const mostBlogs = (blogs) => {
   }, authorCounts[0]);
 };
 
+const mostLikes = (blogs) => {
+  const authorCounts = allAuthors(blogs).map((author) => ({
+    author,
+    likes: likesOfAuthor(author, blogs),
+  }));
+  if (authorCounts.length === 0) return undefined;
+  return authorCounts.reduce((most, author) => {
+    return author.likes > most.likes ? author : most;
+  }, authorCounts[0]);
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
