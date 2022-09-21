@@ -3,7 +3,7 @@ const listHelper = require("../utils/list_helper");
 const blog1 = { title: "t1", author: "a1", url: "u1", likes: 3 };
 const blog2 = { title: "t2", author: "a2", url: "u2", likes: 10 };
 const blog3 = { title: "t3", author: "a3", url: "u3", likes: 5 };
-const blog4 = { title: "t4", author: "a4", url: "u4", likes: 1 };
+const blog4 = { title: "t4", author: "a3", url: "u4", likes: 1 };
 const blog5 = { title: "t5", author: "a5", url: "u5", likes: 0 };
 
 describe("dummy", () => {
@@ -49,6 +49,23 @@ describe("favoriteBlog", () => {
 
   test("empty array should return falsy", () => {
     const res = listHelper.favoriteBlog([]);
+    expect(res).toBeFalsy();
+  });
+});
+
+describe("mostBlogs", () => {
+  test("one blog should return that author", () => {
+    const res = listHelper.mostBlogs([blog1]);
+    expect(res).toEqual({ author: blog1.author, blogs: 1 });
+  });
+
+  test("array of blogs should find the author with most blogs", () => {
+    const res = listHelper.mostBlogs([blog1, blog2, blog3, blog4]);
+    expect(res).toEqual({ author: "a3", blogs: 2 });
+  });
+
+  test("empty array should return falsy", () => {
+    const res = listHelper.mostBlogs([]);
     expect(res).toBeFalsy();
   });
 });
