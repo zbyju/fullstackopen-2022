@@ -77,7 +77,7 @@ const App = () => {
           number: newNumber,
         };
         PersonsService.putPersons(newPerson)
-          .then(({ person: data }) => {
+          .then((data) => {
             const newPersons = persons.map((p) => {
               if (p.id !== existingPerson.id) return p;
               return data;
@@ -87,11 +87,18 @@ const App = () => {
             setNumber("");
           })
           .catch((err) => {
-            setPersons(persons.filter((p) => p.id !== existingPerson.id));
-            showNotification({
-              text: newName + " has already been deleted",
-              type: "error",
-            });
+            if (err.response.data.error.toLowerCase().includes("validation")) {
+              showNotification({
+                text: err.response.data.error,
+                type: "error",
+              });
+            } else {
+              setPersons(persons.filter((p) => p.id !== existingPerson.id));
+              showNotification({
+                text: newName + " has already been deleted",
+                type: "error",
+              });
+            }
           });
       }
     } else {
@@ -100,12 +107,17 @@ const App = () => {
         number: newNumber,
       };
 
-      PersonsService.postPersons(newPerson).then(({ person }) => {
-        setPersons(persons.concat(person));
-        showNotification({ text: "Added " + person.name, type: "success" });
-        setNewName("");
-        setNumber("");
-      });
+      PersonsService.postPersons(newPerson)
+        .then((person) => {
+          setPersons(persons.concat(person));
+          showNotification({ text: "Added " + person.name, type: "success" });
+          setNewName("");
+          setNumber("");
+        })
+        .catch((err) => {
+          console.log(err);
+          showNotification({ text: err.response.data.error, type: "error" });
+        });
     }
   };
 
