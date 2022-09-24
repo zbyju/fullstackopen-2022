@@ -38,6 +38,20 @@ describe("after initial save", () => {
       expect(blog._id).toBeFalsy();
     }
   });
+
+  test("posting new blog works", async () => {
+    const newBlog = {
+      title: "Completely new blog",
+      author: "Bob New",
+      url: "http://blog.com/blogNew",
+      likes: 0,
+    };
+
+    await api.post("/api/blogs").send(newBlog).expect(201);
+
+    const response = await api.get("/api/blogs");
+    expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
+  });
 });
 
 afterAll(() => {
