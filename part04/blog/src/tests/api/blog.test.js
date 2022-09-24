@@ -64,6 +64,24 @@ describe("after initial save", () => {
     console.log(response.body);
     expect(response.body.likes).toBe(0);
   });
+
+  test("posting new blog without title returns status 400", async () => {
+    const newBlog = {
+      author: "No Title Blogger",
+      url: "http://blog.com/blogNoTitle",
+    };
+
+    await api.post("/api/blogs").send(newBlog).expect(400);
+  });
+
+  test("posting new blog without author returns status 400", async () => {
+    const newBlog = {
+      title: "No author blog",
+      url: "http://blog.com/blogNoAuthor",
+    };
+
+    await api.post("/api/blogs").send(newBlog).expect(400);
+  });
 });
 
 afterAll(() => {
