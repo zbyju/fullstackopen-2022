@@ -52,6 +52,18 @@ describe("after initial save", () => {
     const response = await api.get("/api/blogs");
     expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
   });
+
+  test("posting new blog without likes defaults it to 0", async () => {
+    const newBlog = {
+      title: "Blog without likes",
+      author: "Bob New",
+      url: "http://blog.com/blogNoLikes",
+    };
+
+    const response = await api.post("/api/blogs").send(newBlog).expect(201);
+    console.log(response.body);
+    expect(response.body.likes).toBe(0);
+  });
 });
 
 afterAll(() => {
