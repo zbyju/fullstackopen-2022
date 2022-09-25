@@ -16,7 +16,7 @@ beforeAll(async () => {
   await Promise.all(promises);
 });
 
-describe("after initial save", () => {
+describe("fetch and save after initial save", () => {
   test("blogs are returned as json", async () => {
     await api
       .get("/api/blogs")
@@ -33,7 +33,6 @@ describe("after initial save", () => {
   test("the id property is defined", async () => {
     const response = await api.get("/api/blogs");
     for (const blog of response.body) {
-      console.log(blog);
       expect(blog.id).toBeDefined();
       expect(blog._id).toBeFalsy();
     }
@@ -52,7 +51,9 @@ describe("after initial save", () => {
     const response = await api.get("/api/blogs");
     expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
   });
+});
 
+describe("saving incomplete blogs", () => {
   test("posting new blog without likes defaults it to 0", async () => {
     const newBlog = {
       title: "Blog without likes",
@@ -61,7 +62,6 @@ describe("after initial save", () => {
     };
 
     const response = await api.post("/api/blogs").send(newBlog).expect(201);
-    console.log(response.body);
     expect(response.body.likes).toBe(0);
   });
 
@@ -81,6 +81,41 @@ describe("after initial save", () => {
     };
 
     await api.post("/api/blogs").send(newBlog).expect(400);
+  });
+});
+
+describe("deleting blogs", () => {
+  test("deleting existing blog works", async () => {
+    const blogsBefore = await helper.blogsInDb();
+    const blog = blogsBefore[0];
+
+    await api.delete("/api/blogs/" + blog.id).expect(204);
+
+    const blogsAfter = await helper.blogsInDb();
+
+    expect(blogsAfter).toHaveLength(blogsBefore.length - 1);
+  });
+});
+
+describe("updating blogs", () => {
+  test("updating existing blog works", async () => {
+    const blogBefore = (await helper.blogsInDb())[0];
+    const changed = {
+      title: "Changed title",
+      likes: blogBefore.likes + 1,
+    };
+    const response = await await api
+      .put("/api/blogs/" + blogBefore.id)
+      .send(changed);
+    const blog = response.body;
+
+    const blogAfter = (await helper.blogsInDb())[0];
+
+    expect(blog).toEqual(blogAfter);
+    expect(blog.title).toBe(changed.title);
+    expect(blog.likes).toBe(changed.likes);
+    expect(blog.author).toBe(blogBefore.author);
+    expect(blog.url).toBe(blogBefore.url);
   });
 });
 
