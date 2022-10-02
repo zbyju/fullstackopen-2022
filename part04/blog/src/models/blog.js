@@ -7,6 +7,7 @@ const blogSchema = new mongoose.Schema({
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
   author: {
@@ -25,7 +26,7 @@ blogSchema.set("toJSON", {
     returnedObject.id = returnedObject._id.toString();
     if (
       returnedObject.user &&
-      mongoose.Types.ObjectId.isValid(returnedObject.user)
+      mongoose.Types.ObjectId.isValid(returnedObject.user.toString())
     ) {
       returnedObject.user = returnedObject.user.toString();
     }
