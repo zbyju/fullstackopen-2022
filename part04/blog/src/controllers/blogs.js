@@ -23,7 +23,7 @@ router.post("/", async (req, res, next) => {
   try {
     const decodedToken = jwt.verify(req.token, process.env.SECRET);
     if (!decodedToken.id) {
-      return response.status(401).json({ error: "token missing or invalid" });
+      return res.status(401).json({ error: "token missing or invalid" });
     }
     const user = await User.findById(decodedToken.id);
 
@@ -47,6 +47,16 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
   try {
+    const decodedToken = jwt.verify(req.token, process.env.SECRET);
+    if (!decodedToken.id) {
+      return res.status(401).json({ error: "token missing or invalid" });
+    }
+    const blog = await Blog.findById(req.params.id);
+    if (blog.user.toString() !== decodedToken.id.toString()) {
+      return res
+        .status(401)
+        .json({ error: "attempt at deleting someone else's blog" });
+    }
     await Blog.findByIdAndRemove(req.params.id);
     res.status(204).end();
   } catch (err) {

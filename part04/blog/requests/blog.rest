@@ -12,3 +12,24 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc
   "url": "http://blogtest.com/haha",
   "likes": 2
 }
+
+###
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIyIiwiaWQiOiI2MzM5ZjE5YjE2Zjk1M2NiYjc4NGNiNzAiLCJpYXQiOjE2NjQ3NDE4MTIsImV4cCI6MTY2NDc0NTQxMn0.BhLgAaJMiwIeg9oODYNKpL_VAQYHUSfBaY2-bcxBrik
+
+{
+  "title": "user2 title",
+  "author": "from user 2",
+  "url": "http://blogtest.com/haha",
+  "likes": 5
+}
+
+###
+
+DELETE http://localhost:3003/api/blogs/6339f29b1226012ea8e016c6
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIyIiwiaWQiOiI2MzM5ZjE5YjE2Zjk1M2NiYjc4NGNiNzAiLCJpYXQiOjE2NjQ3NDE4MTIsImV4cCI6MTY2NDc0NTQxMn0.BhLgAaJMiwIeg9oODYNKpL_VAQYHUSfBaY2-bcxBrik
