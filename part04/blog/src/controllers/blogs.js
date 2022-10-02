@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const Blog = require("../models/blog");
 const User = require("../models/user");
@@ -21,11 +20,10 @@ router.post("/", async (req, res, next) => {
   const { title, author, url, likes } = req.body;
 
   try {
-    const decodedToken = jwt.verify(req.token, process.env.SECRET);
-    if (!decodedToken.id) {
+    if (!req.user) {
       return res.status(401).json({ error: "token missing or invalid" });
     }
-    const user = await User.findById(decodedToken.id);
+    const user = await User.findById(req.user.id);
 
     const blog = new Blog({
       title,
@@ -47,12 +45,15 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
   try {
-    const decodedToken = jwt.verify(req.token, process.env.SECRET);
-    if (!decodedToken.id) {
+    if (!req.user) {
       return res.status(401).json({ error: "token missing or invalid" });
     }
     const blog = await Blog.findById(req.params.id);
-    if (blog.user.toString() !== decodedToken.id.toString()) {
+    if (!blog) {
+      return res.status(400).json({ error: "blog doesn't exist" });
+    }
+
+    if (blog.user.toString() !== req.user.id.toString()) {
       return res
         .status(401)
         .json({ error: "attempt at deleting someone else's blog" });
@@ -73,6 +74,11 @@ router.put("/:id", async (req, res, next) => {
     const updated = await Blog.findByIdAndUpdate(req.params.id, blog, {
       new: true,
     });
+    if (updated === null) {
+      return res
+        .status(400)
+        .json({ error: "blog with this id could not be found" });
+    }
     res.status(200).json(updated);
   } catch (err) {
     next(err);

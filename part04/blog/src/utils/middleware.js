@@ -1,4 +1,5 @@
 const logger = require("./logger");
+const jwt = require("jsonwebtoken");
 
 const requestLogger = (request, response, next) => {
   logger.info("Method:", request.method);
@@ -16,6 +17,21 @@ const tokenExtractor = (request, response, next) => {
   request.tokne = null;
   next();
 };
+
+const userExtractor = (request, response, next) => {
+  if (!request.token) {
+    request.user = null;
+  } else {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET);
+    request.user = {
+      id: decodedToken.id,
+      username: decodedToken.username,
+      exp: decodedToken.exp,
+    };
+  }
+  next();
+};
+
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
@@ -39,6 +55,7 @@ const errorHandler = (error, request, response, next) => {
 module.exports = {
   requestLogger,
   tokenExtractor,
+  userExtractor,
   unknownEndpoint,
   errorHandler,
 };
