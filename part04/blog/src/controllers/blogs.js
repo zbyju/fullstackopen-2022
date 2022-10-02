@@ -1,5 +1,7 @@
 const router = require("express").Router();
+const { default: mongoose } = require("mongoose");
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -11,13 +13,21 @@ router.get("/", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const blog = new Blog(req.body);
+  const { title, author, url, likes } = req.body;
 
   try {
+    const user = (await User.find({}))[0];
+    const blog = new Blog({
+      title,
+      author,
+      user: user.id,
+      url,
+      likes,
+    });
     const result = await blog.save();
     res.status(201).json(result);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 });
 

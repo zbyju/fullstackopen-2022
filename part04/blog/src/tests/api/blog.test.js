@@ -3,17 +3,27 @@ const supertest = require("supertest");
 const { response } = require("../../app");
 const app = require("../../app");
 const Blog = require("../../models/blog");
+const User = require("../../models/user");
 const helper = require("./test_helper");
 
 const api = supertest(app);
 
 beforeAll(async () => {
+  await User.deleteMany({});
   await Blog.deleteMany({});
-  const promises = helper.initialBlogs.map((b) => {
-    const blog = new Blog(b);
+
+  const promisesUsers = helper.initialUsers.map((u) => {
+    const user = new User(u);
+    return user.save();
+  });
+  const usersAdded = await Promise.all(promisesUsers);
+  const userId = usersAdded[0].id;
+
+  const promisesBlogs = helper.initialBlogs.map((b) => {
+    const blog = new Blog({ ...b, user: userId });
     return blog.save();
   });
-  await Promise.all(promises);
+  await Promise.all(promisesBlogs);
 });
 
 describe("fetch and save after initial save", () => {
@@ -108,6 +118,7 @@ describe("updating blogs", () => {
       .put("/api/blogs/" + blogBefore.id)
       .send(changed);
     const blog = response.body;
+    blog.author = blog.author.toString();
 
     const blogAfter = (await helper.blogsInDb())[0];
 
