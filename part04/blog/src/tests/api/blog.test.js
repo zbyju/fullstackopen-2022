@@ -7,16 +7,16 @@ const User = require("../../models/user");
 const helper = require("./test_helper");
 
 const api = supertest(app);
+let tokens = [];
 
 beforeAll(async () => {
   await User.deleteMany({});
   await Blog.deleteMany({});
 
   const promisesUsers = helper.initialUsers.map((u) => {
-    const user = new User(u);
-    return user.save();
+    return api.post("/api/users").send(u);
   });
-  const usersAdded = await Promise.all(promisesUsers);
+  const usersAdded = (await Promise.all(promisesUsers)).map((p) => p.body);
   const userId = usersAdded[0].id;
 
   const promisesBlogs = helper.initialBlogs.map((b) => {
@@ -24,6 +24,16 @@ beforeAll(async () => {
     return blog.save();
   });
   await Promise.all(promisesBlogs);
+
+  //Login all users
+  const promisedLogins = helper.initialUsers.map((u) => {
+    const auth = { username: u.username, password: u.password };
+    return api.post("/api/login").send(auth);
+  });
+  const logins = await Promise.all(promisedLogins);
+  tokens = logins.map((l) => {
+    return l.body.token;
+  });
 });
 
 describe("fetch and save after initial save", () => {
@@ -56,7 +66,11 @@ describe("fetch and save after initial save", () => {
       likes: 0,
     };
 
-    await api.post("/api/blogs").send(newBlog).expect(201);
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .set("Authorization", `bearer ${tokens[0]}`)
+      .expect(201);
 
     const response = await api.get("/api/blogs");
     expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
@@ -71,7 +85,11 @@ describe("saving incomplete blogs", () => {
       url: "http://blog.com/blogNoLikes",
     };
 
-    const response = await api.post("/api/blogs").send(newBlog).expect(201);
+    const response = await api
+      .post("/api/blogs")
+      .set("Authorization", `bearer ${tokens[0]}`)
+      .send(newBlog)
+      .expect(201);
     expect(response.body.likes).toBe(0);
   });
 
@@ -81,7 +99,11 @@ describe("saving incomplete blogs", () => {
       url: "http://blog.com/blogNoTitle",
     };
 
-    await api.post("/api/blogs").send(newBlog).expect(400);
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .set("Authorization", `bearer ${tokens[0]}`)
+      .expect(400);
   });
 
   test("posting new blog without author returns status 400", async () => {
@@ -90,7 +112,11 @@ describe("saving incomplete blogs", () => {
       url: "http://blog.com/blogNoAuthor",
     };
 
-    await api.post("/api/blogs").send(newBlog).expect(400);
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .set("Authorization", `bearer ${tokens[0]}`)
+      .expect(400);
   });
 });
 
@@ -99,7 +125,10 @@ describe("deleting blogs", () => {
     const blogsBefore = await helper.blogsInDb();
     const blog = blogsBefore[0];
 
-    await api.delete("/api/blogs/" + blog.id).expect(204);
+    await api
+      .delete("/api/blogs/" + blog.id)
+      .set("Authorization", `bearer ${tokens[0]}`)
+      .expect(204);
 
     const blogsAfter = await helper.blogsInDb();
 
@@ -114,8 +143,9 @@ describe("updating blogs", () => {
       title: "Changed title",
       likes: blogBefore.likes + 1,
     };
-    const response = await await api
+    const response = await api
       .put("/api/blogs/" + blogBefore.id)
+      .set("Authorization", `bearer ${tokens[0]}`)
       .send(changed);
     const blog = response.body;
     blog.author = blog.author.toString();
