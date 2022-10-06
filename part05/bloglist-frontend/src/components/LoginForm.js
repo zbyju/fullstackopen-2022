@@ -11,7 +11,7 @@ const LoginForm = ({ onLogin }) => {
       const user = await loginService.login({ username, password });
       setUsername("");
       setPassword("");
-      console.log(user);
+      window.localStorage.setItem("loggedBloglistUser", JSON.stringify(user));
       onLogin(user);
     } catch (err) {
       console.log("error when logging in", err);
