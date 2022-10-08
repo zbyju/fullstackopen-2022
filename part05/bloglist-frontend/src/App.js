@@ -103,6 +103,7 @@ const App = () => {
         <Blog
           key={blog.id}
           blog={blog}
+          user={user}
           onUpdate={handleUpdate}
           onDelete={handleDelete}
           onError={handleUpdateError}
