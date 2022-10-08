@@ -11,6 +11,8 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [notification, setNotification] = useState(null);
 
+  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
+
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
@@ -35,6 +37,10 @@ const App = () => {
     setNotification({ text: err.response.data.error });
   }
 
+  function handleUpdateError(err) {
+    setNotification({ text: err.response.data.error });
+  }
+
   function handleLogout() {
     setUser(null);
     blogService.setToken(null);
@@ -45,6 +51,15 @@ const App = () => {
   function handleCreate(blog) {
     setBlogs(blogs.concat(blog));
     setNotification({ text: "Created new blog with title: " + blog.title });
+  }
+
+  function handleUpdate(blog) {
+    const newBlogs = blogs.map((b) => {
+      if (b.id !== blog.id) return b;
+      return blog;
+    });
+    setBlogs(newBlogs);
+    setNotification({ text: "Updated blog with title: " + blog.title });
   }
 
   function handleCreateError(err) {
@@ -78,8 +93,13 @@ const App = () => {
         </>
       )}
 
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+      {sortedBlogs.map((blog) => (
+        <Blog
+          key={blog.id}
+          blog={blog}
+          onUpdate={handleUpdate}
+          onError={handleUpdateError}
+        />
       ))}
     </div>
   );

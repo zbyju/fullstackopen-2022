@@ -17,4 +17,13 @@ const create = (blog) => {
   return request.then((response) => response.data);
 };
 
-export default { setToken, getAll, create };
+const like = (blog) => update({ ...blog, likes: blog.likes + 1 });
+
+const update = (blog) => {
+  const config = { headers: { Authorization: token } };
+
+  const request = axios.put(`${baseUrl}/${blog.id}`, blog, config);
+  return request.then((response) => response.data);
+};
+
+export default { setToken, getAll, create, update, like };
