@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import AddBlogForm from "./components/AddBlogForm";
 import Blog from "./components/Blog";
 import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
@@ -16,12 +17,18 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
+      blogService.setToken(user.token);
     }
   }, []);
 
   function handleLogout() {
     setUser(null);
+    blogService.setToken(null);
     window.localStorage.removeItem("loggedBloglistUser");
+  }
+
+  function handleCreate(blog) {
+    setBlogs(blogs.concat(blog));
   }
 
   return (
@@ -36,6 +43,7 @@ const App = () => {
             You are logged in as: {user.username}
             <button onClick={handleLogout}>logout</button>
           </p>
+          <AddBlogForm onCreate={handleCreate} />
         </>
       )}
 
