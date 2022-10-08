@@ -1,7 +1,7 @@
 import { useState } from "react";
 import loginService from "../services/login";
 
-const LoginForm = ({ onLogin }) => {
+const LoginForm = ({ onLogin, onError }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,7 +14,7 @@ const LoginForm = ({ onLogin }) => {
       window.localStorage.setItem("loggedBloglistUser", JSON.stringify(user));
       onLogin(user);
     } catch (err) {
-      console.log("error when logging in", err);
+      onError(err);
     }
   };
 
