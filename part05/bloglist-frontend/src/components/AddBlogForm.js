@@ -27,7 +27,7 @@ const AddBlogForm = ({ onCreate, onError }) => {
   }
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <h1>Create blog</h1>
       <label htmlFor="title">Title: </label>
       <input
@@ -50,7 +50,7 @@ const AddBlogForm = ({ onCreate, onError }) => {
         onChange={({ target }) => setUrl(target.value)}
       />
       <br />
-      <button onClick={handleSubmit}>Create</button>
+      <button>Create</button>
     </form>
   );
 };
