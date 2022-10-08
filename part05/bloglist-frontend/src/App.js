@@ -4,6 +4,7 @@ import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
+import Togglable from "./components/Toggleable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -71,7 +72,9 @@ const App = () => {
             You are logged in as: {user.username}
             <button onClick={handleLogout}>logout</button>
           </p>
-          <AddBlogForm onCreate={handleCreate} onError={handleCreateError} />
+          <Togglable buttonLabel="new blog">
+            <AddBlogForm onCreate={handleCreate} onError={handleCreateError} />
+          </Togglable>
         </>
       )}
 
