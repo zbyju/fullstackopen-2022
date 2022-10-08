@@ -62,6 +62,12 @@ const App = () => {
     setNotification({ text: "Updated blog with title: " + blog.title });
   }
 
+  function handleDelete(id) {
+    const newBlogs = blogs.filter((b) => b.id !== id);
+    setBlogs(newBlogs);
+    setNotification({ text: "Successfully deleted blog" });
+  }
+
   function handleCreateError(err) {
     setNotification({ text: err });
   }
@@ -98,6 +104,7 @@ const App = () => {
           key={blog.id}
           blog={blog}
           onUpdate={handleUpdate}
+          onDelete={handleDelete}
           onError={handleUpdateError}
         />
       ))}

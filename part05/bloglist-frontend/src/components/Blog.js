@@ -1,7 +1,7 @@
 import { useState } from "react";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog, onUpdate, onError }) => {
+const Blog = ({ blog, onUpdate, onDelete, onError }) => {
   const [showDetails, setShowDetails] = useState(false);
   const blogStyle = {
     paddingTop: 10,
@@ -17,6 +17,20 @@ const Blog = ({ blog, onUpdate, onError }) => {
     try {
       const newBlog = await blogService.like(blog);
       onUpdate(newBlog);
+    } catch (err) {
+      onError(err);
+    }
+  }
+
+  async function handleDelete() {
+    if (
+      !window.confirm("Do you really want to delete blog: " + blog.title + "?")
+    ) {
+      return;
+    }
+    try {
+      await blogService.remove(blog.id);
+      onDelete(blog.id);
     } catch (err) {
       onError(err);
     }
@@ -38,6 +52,7 @@ const Blog = ({ blog, onUpdate, onError }) => {
             likes: {blog.likes} <button onClick={handleLike}>like</button>
           </p>
           <p>{blog.author}</p>
+          <button onClick={handleDelete}>delete</button>
         </>
       )}
     </div>

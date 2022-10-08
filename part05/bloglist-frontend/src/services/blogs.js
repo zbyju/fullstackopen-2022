@@ -26,4 +26,10 @@ const update = (blog) => {
   return request.then((response) => response.data);
 };
 
-export default { setToken, getAll, create, update, like };
+const remove = (id) => {
+  const config = { headers: { Authorization: token } };
+
+  return axios.delete(`${baseUrl}/${id}`, config);
+};
+
+export default { setToken, getAll, create, update, like, remove };
