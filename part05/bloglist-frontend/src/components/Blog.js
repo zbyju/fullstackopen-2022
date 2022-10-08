@@ -11,7 +11,7 @@ const Blog = ({ blog, onUpdate, onError }) => {
     marginBottom: 5,
   };
 
-  const detailsButtonText = () => (showDetails ? "hide" : "show");
+  const detailsButtonText = showDetails ? "hide" : "show";
 
   async function handleLike() {
     try {
@@ -27,7 +27,7 @@ const Blog = ({ blog, onUpdate, onError }) => {
       <h3>
         {blog.title}
         <button onClick={() => setShowDetails(!showDetails)}>
-          {detailsButtonText()}
+          {detailsButtonText}
         </button>
       </h3>
 
