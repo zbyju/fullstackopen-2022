@@ -27,12 +27,13 @@ const AddBlogForm = ({ onCreate, onError }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Create blog</h1>
+    <form className="add-blog-form" onSubmit={handleSubmit}>
+      <h1 className="add-blog-form-heading">Create blog</h1>
       <label htmlFor="title">Title: </label>
       <input
         name="title"
         value={title}
+        className="add-blog-form-title"
         onChange={({ target }) => setTitle(target.value)}
       />
       <br />
@@ -40,6 +41,7 @@ const AddBlogForm = ({ onCreate, onError }) => {
       <input
         name="author"
         value={author}
+        className="add-blog-form-author"
         onChange={({ target }) => setAuthor(target.value)}
       />
       <br />
@@ -47,6 +49,7 @@ const AddBlogForm = ({ onCreate, onError }) => {
       <input
         name="url"
         value={url}
+        className="add-blog-form-url"
         onChange={({ target }) => setUrl(target.value)}
       />
       <br />

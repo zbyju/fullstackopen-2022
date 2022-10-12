@@ -37,8 +37,8 @@ const Blog = ({ blog, user, onUpdate, onDelete, onError }) => {
   }
 
   return (
-    <div style={blogStyle}>
-      <h3>
+    <div style={blogStyle} className="blog">
+      <h3 className="blog-title">
         {blog.title}
         <button onClick={() => setShowDetails(!showDetails)}>
           {detailsButtonText}
@@ -47,13 +47,18 @@ const Blog = ({ blog, user, onUpdate, onDelete, onError }) => {
 
       {showDetails && (
         <>
-          <p>{blog.url}</p>
-          <p>
-            likes: {blog.likes} <button onClick={handleLike}>like</button>
+          <p className="blog-url">{blog.url}</p>
+          <p className="blog-likes">
+            likes: {blog.likes}{" "}
+            <button className="blog-like-btn" onClick={handleLike}>
+              like
+            </button>
           </p>
-          <p>{blog.author}</p>
+          <p className="blog-author">{blog.author}</p>
           {user.id === blog.user.id && (
-            <button onClick={handleDelete}>delete</button>
+            <button onClick={handleDelete} className="blog-delete-btn">
+              delete
+            </button>
           )}
         </>
       )}

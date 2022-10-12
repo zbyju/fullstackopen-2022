@@ -12,7 +12,7 @@ const Notification = ({ notification, onDelete }) => {
 
   return (
     <div className="notification">
-      <p>{notification.text}</p>
+      <p className="notification-text">{notification.text}</p>
     </div>
   );
 };

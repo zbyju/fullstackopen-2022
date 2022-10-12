@@ -20,29 +20,28 @@ const LoginForm = ({ onLogin, onError }) => {
 
   return (
     <>
-      <form onSubmit={handleLogin}>
-        {" "}
+      <form onSubmit={handleLogin} className="login-form">
         <div>
-          {" "}
-          username{" "}
+          username
           <input
             type="text"
             value={username}
             name="Username"
+            className="login-form-username"
             onChange={({ target }) => setUsername(target.value)}
-          />{" "}
-        </div>{" "}
+          />
+        </div>
         <div>
-          {" "}
-          password{" "}
+          password
           <input
             type="password"
             value={password}
             name="Password"
+            className="login-form-password"
             onChange={({ target }) => setPassword(target.value)}
-          />{" "}
-        </div>{" "}
-        <button type="submit">login</button>{" "}
+          />
+        </div>
+        <button type="submit">login</button>
       </form>
     </>
   );
