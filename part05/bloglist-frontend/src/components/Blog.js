@@ -40,7 +40,10 @@ const Blog = ({ blog, user, onUpdate, onDelete, onError }) => {
     <div style={blogStyle} className="blog">
       <h3 className="blog-title">
         {blog.title}
-        <button onClick={() => setShowDetails(!showDetails)}>
+        <button
+          onClick={() => setShowDetails(!showDetails)}
+          className="blog-details-btn"
+        >
           {detailsButtonText}
         </button>
       </h3>
