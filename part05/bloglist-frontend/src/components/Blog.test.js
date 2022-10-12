@@ -1,9 +1,9 @@
 import React from "react";
 import "@testing-library/jest-dom/extend-expect";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import Blog from "./Blog";
 
-test("renders content", () => {
+test("renders title and author, hides url and likes", () => {
   const blog = {
     id: "b123",
     title: "Blog title test",
@@ -17,10 +17,14 @@ test("renders content", () => {
     likes: 42,
   };
 
-  render(<Blog blog={blog} />);
+  const { container } = render(<Blog blog={blog} />);
 
-  const title = screen.queryByText.("Blog title test");
-  expect(element).toBeDefined();
-  const element = screen.getByText("Blog title test");
-  expect(element).toBeDefined();
+  const title = container.querySelector(".blog-title");
+  expect(title).toBeDefined();
+  const author = container.querySelector(".blog-author");
+  expect(author).toBeDefined();
+  const url = container.querySelector(".blog-url");
+  expect(url).toBeNull();
+  const likes = container.querySelector(".blog-likes");
+  expect(likes).toBeNull();
 });
