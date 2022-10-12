@@ -49,3 +49,24 @@ test("renders title and author url and likes after clicking show button", async 
   const likes = container.querySelector(".blog-likes");
   expect(likes).toBeDefined();
 });
+
+test("calls onUpdate when clicking like button", async () => {
+  const mockHandler = jest.fn();
+  const { container } = render(
+    <Blog blog={blog} user={user} onUpdate={mockHandler} />
+  );
+
+  const ue = userEvent.setup();
+  const detailsBtn = container.querySelector(".blog-details-btn");
+  expect(detailsBtn).toBeDefined();
+  await ue.click(detailsBtn);
+
+  const likeBtn = container.querySelector(".blog-like-btn");
+  expect(likeBtn).toBeDefined();
+  await ue.click(likeBtn);
+
+  expect(mockHandler.mock.calls).toHaveLength(1);
+
+  await ue.click(likeBtn);
+  expect(mockHandler.mock.calls).toHaveLength(2);
+});

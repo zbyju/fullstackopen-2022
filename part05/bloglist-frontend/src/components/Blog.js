@@ -1,7 +1,6 @@
 import { useState } from "react";
-import blogService from "../services/blogs";
 
-const Blog = ({ blog, user, onUpdate, onDelete, onError }) => {
+const Blog = ({ blog, user, onUpdate, onDelete }) => {
   const [showDetails, setShowDetails] = useState(false);
   const blogStyle = {
     paddingTop: 10,
@@ -12,29 +11,6 @@ const Blog = ({ blog, user, onUpdate, onDelete, onError }) => {
   };
 
   const detailsButtonText = showDetails ? "hide" : "show";
-
-  async function handleLike() {
-    try {
-      const newBlog = await blogService.like(blog);
-      onUpdate(newBlog);
-    } catch (err) {
-      onError(err);
-    }
-  }
-
-  async function handleDelete() {
-    if (
-      !window.confirm("Do you really want to delete blog: " + blog.title + "?")
-    ) {
-      return;
-    }
-    try {
-      await blogService.remove(blog.id);
-      onDelete(blog.id);
-    } catch (err) {
-      onError(err);
-    }
-  }
 
   return (
     <div style={blogStyle} className="blog">
@@ -53,13 +29,13 @@ const Blog = ({ blog, user, onUpdate, onDelete, onError }) => {
           <p className="blog-url">{blog.url}</p>
           <p className="blog-likes">
             likes: {blog.likes}{" "}
-            <button className="blog-like-btn" onClick={handleLike}>
+            <button className="blog-like-btn" onClick={() => onUpdate(blog)}>
               like
             </button>
           </p>
           <p className="blog-author">{blog.author}</p>
           {user.id === blog.user.id && (
-            <button onClick={handleDelete} className="blog-delete-btn">
+            <button onClick={() => onDelete(blog)} className="blog-delete-btn">
               delete
             </button>
           )}

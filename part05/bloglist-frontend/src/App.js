@@ -53,19 +53,34 @@ const App = () => {
     setNotification({ text: "Created new blog with title: " + blog.title });
   }
 
-  function handleUpdate(blog) {
-    const newBlogs = blogs.map((b) => {
-      if (b.id !== blog.id) return b;
-      return blog;
-    });
-    setBlogs(newBlogs);
-    setNotification({ text: "Updated blog with title: " + blog.title });
+  async function handleUpdate(blog) {
+    try {
+      const newBlog = await blogService.like(blog);
+      const newBlogs = blogs.map((b) => {
+        if (b.id !== newBlog.id) return b;
+        return newBlog;
+      });
+      setBlogs(newBlogs);
+      setNotification({ text: "Updated blog with title: " + blog.title });
+    } catch (err) {
+      handleUpdateError(err);
+    }
   }
 
-  function handleDelete(id) {
-    const newBlogs = blogs.filter((b) => b.id !== id);
-    setBlogs(newBlogs);
-    setNotification({ text: "Successfully deleted blog" });
+  async function handleDelete(blog) {
+    if (
+      !window.confirm("Do you really want to delete blog: " + blog.title + "?")
+    ) {
+      return;
+    }
+    try {
+      await blogService.remove(blog.id);
+      const newBlogs = blogs.filter((b) => b.id !== blog.id);
+      setBlogs(newBlogs);
+      setNotification({ text: "Successfully deleted blog" });
+    } catch (err) {
+      handleUpdateError(err);
+    }
   }
 
   function handleCreateError(err) {
@@ -106,7 +121,6 @@ const App = () => {
           user={user}
           onUpdate={handleUpdate}
           onDelete={handleDelete}
-          onError={handleUpdateError}
         />
       ))}
     </div>
