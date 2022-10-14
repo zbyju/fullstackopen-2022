@@ -4,22 +4,7 @@ import { render } from "@testing-library/react";
 import AddBlogForm from "./AddBlogForm";
 import userEvent from "@testing-library/user-event";
 
-const user = {
-  id: "u123",
-  username: "test",
-  name: "Test User",
-};
-
-const blog = {
-  id: "b123",
-  title: "Blog title test",
-  author: "Test Author",
-  user,
-  url: "http://test.com/testing",
-  likes: 42,
-};
-
-test("renders title and author, hides url and likes", async () => {
+test("after submit calls onCreate with blog contents", async () => {
   const createBlogFn = jest.fn();
   const user = userEvent.setup();
 
