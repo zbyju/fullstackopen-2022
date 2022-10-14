@@ -18,7 +18,6 @@ const Notification = ({ notification, onDelete }) => {
 };
 
 Notification.propTypes = {
-  notification: PropTypes.object.isRequired,
   onDelete: PropTypes.func.isRequired,
 };
 

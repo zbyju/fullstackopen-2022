@@ -41,7 +41,9 @@ const LoginForm = ({ onLogin, onError }) => {
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button type="submit">login</button>
+        <button type="submit" className="login-form-submit">
+          login
+        </button>
       </form>
     </>
   );

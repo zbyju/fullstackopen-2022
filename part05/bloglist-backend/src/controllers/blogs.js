@@ -25,6 +25,10 @@ router.post("/", async (req, res, next) => {
     }
     const user = await User.findById(req.user.id);
 
+    if (!user) {
+      res.status(401).json({ error: "user not found" });
+    }
+
     const blog = new Blog({
       title,
       author,

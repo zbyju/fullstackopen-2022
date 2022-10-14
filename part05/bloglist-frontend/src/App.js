@@ -91,7 +91,7 @@ const App = () => {
   }
 
   function handleCreateError(err) {
-    setNotification({ text: err });
+    setNotification({ text: err.error });
   }
 
   function handleNotificationDelete() {
