@@ -48,9 +48,16 @@ const App = () => {
     setNotification({ text: "Successfully logged out" });
   }
 
-  function handleCreate(blog) {
-    setBlogs(blogs.concat(blog));
-    setNotification({ text: "Created new blog with title: " + blog.title });
+  async function handleCreate(blog) {
+    try {
+      const newBlog = await blogService.create(blog);
+      setBlogs(blogs.concat(newBlog));
+      setNotification({
+        text: "Created new blog with title: " + newBlog.title,
+      });
+    } catch (err) {
+      handleCreateError(err);
+    }
   }
 
   async function handleUpdate(blog) {
@@ -109,7 +116,7 @@ const App = () => {
             <button onClick={handleLogout}>logout</button>
           </p>
           <Togglable buttonLabel="new blog">
-            <AddBlogForm onCreate={handleCreate} onError={handleCreateError} />
+            <AddBlogForm onCreate={handleCreate} />
           </Togglable>
         </>
       )}

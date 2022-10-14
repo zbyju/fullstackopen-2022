@@ -1,29 +1,21 @@
 import { useState } from "react";
-import blogService from "../services/blogs";
 
-const AddBlogForm = ({ onCreate, onError }) => {
+const AddBlogForm = ({ onCreate }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
-    try {
-      const blog = {
-        title,
-        author,
-        url,
-      };
-
-      const newBlog = await blogService.create(blog);
-
-      onCreate(newBlog);
-      setTitle("");
-      setAuthor("");
-      setUrl("");
-    } catch (err) {
-      onError(err);
-    }
+    const blog = {
+      title,
+      author,
+      url,
+    };
+    onCreate(blog);
+    setTitle("");
+    setAuthor("");
+    setUrl("");
   }
 
   return (
@@ -53,7 +45,9 @@ const AddBlogForm = ({ onCreate, onError }) => {
         onChange={({ target }) => setUrl(target.value)}
       />
       <br />
-      <button>Create</button>
+      <button type="submit" className="add-blog-form-submit">
+        Create
+      </button>
     </form>
   );
 };
