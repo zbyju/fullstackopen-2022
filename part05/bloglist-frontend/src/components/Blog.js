@@ -28,7 +28,7 @@ const Blog = ({ blog, user, onUpdate, onDelete }) => {
         <>
           <p className="blog-url">{blog.url}</p>
           <p className="blog-likes">
-            likes: {blog.likes}{" "}
+            likes: <span className="blog-likes-number">{blog.likes}</span>
             <button className="blog-like-btn" onClick={() => onUpdate(blog)}>
               like
             </button>
