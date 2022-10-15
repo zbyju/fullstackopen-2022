@@ -1,0 +1,47 @@
+GET http://localhost:3003/api/blogs
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QgdGl0bGUiLCJpZCI6IjYzMzlmNGM5ZGQ3NjBjMGQyNzE1NDkzNSIsImlhdCI6MTY2NDc0MjYxMywiZXhwIjoxNjY0NzQ2MjEzfQ.KXVDeTmceIVXmTfiVejQq827NwWJokBbYRKw1DB8-Iw
+
+{
+  "title": "test title",
+  "author": "random author",
+  "url": "http://blogtest.com/haha",
+  "likes": 2
+}
+
+###
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIyIiwiaWQiOiI2MzM5ZjRjYmRkNzYwYzBkMjcxNTQ5MzkiLCJpYXQiOjE2NjQ3NDI2NTEsImV4cCI6MTY2NDc0NjI1MX0.kFPpbBray8M4FPL53wSlvT6vs4C8jntSDEhv7joIGz8
+
+{
+  "title": "user2 title",
+  "author": "from user 2",
+  "url": "http://blogtest.com/haha",
+  "likes": 5
+}
+
+###
+
+PUT http://localhost:3003/api/blogs/6339f619967ce592dc55118c
+Content-Type: application/json
+
+{
+  "title": "changed title",
+  "author": "changed author",
+  "url": "changed url",
+  "likes": -1
+}
+
+###
+
+DELETE http://localhost:3003/api/blogs/6339f50add760c0d27154947
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIyIiwiaWQiOiI2MzM5ZjRjYmRkNzYwYzBkMjcxNTQ5MzkiLCJpYXQiOjE2NjQ3NDI2NTEsImV4cCI6MTY2NDc0NjI1MX0.kFPpbBray8M4FPL53wSlvT6vs4C8jntSDEhv7joIGz8
