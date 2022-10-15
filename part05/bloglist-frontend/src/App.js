@@ -28,6 +28,7 @@ const App = () => {
 
   function handleLogin(user) {
     setUser(user);
+    blogService.setToken(user.token);
     setNotification({
       text: "Successfully logged in with username: " + user.username,
     });

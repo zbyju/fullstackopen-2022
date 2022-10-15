@@ -26,7 +26,7 @@ router.post("/", async (req, res, next) => {
     const user = await User.findById(req.user.id);
 
     if (!user) {
-      res.status(401).json({ error: "user not found" });
+      return res.status(401).json({ error: "user not found" });
     }
 
     const blog = new Blog({
@@ -41,7 +41,18 @@ router.post("/", async (req, res, next) => {
     user.blogs = user.blogs.concat(result.id);
     await user.save();
 
-    res.status(201).json(result);
+    res.status(201).json({
+      title: result.title,
+      author: result.author,
+      url: result.url,
+      likes: result.likes,
+      id: result._id,
+      user: {
+        username: user.username,
+        id: user.id,
+        name: user.name,
+      },
+    });
   } catch (err) {
     return next(err);
   }
