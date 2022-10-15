@@ -92,5 +92,35 @@ describe("Blog app", function () {
 
       cy.contains("Successfully deleted");
     });
+
+    it("Blogs are sorted based on likes", function () {
+      cy.contains("new blog").click();
+
+      // Create first blog
+      cy.get(".add-blog-form-title").type("2nd most likes");
+      cy.get(".add-blog-form-author").type("2nd");
+      cy.get(".add-blog-form-url").type("2nd");
+      cy.get(".add-blog-form-submit").click();
+
+      //Create second blog
+      cy.get(".add-blog-form-title").type("1st most likes");
+      cy.get(".add-blog-form-author").type("1st");
+      cy.get(".add-blog-form-url").type("1st");
+      cy.get(".add-blog-form-submit").click();
+
+      // "2nd most likes" should be first as it was added first
+      cy.get(".blog").should("have.length", 2);
+      cy.get(".blog").eq(0).contains("2nd most likes");
+      cy.get(".blog").eq(1).contains("1st most likes");
+
+      // like the "1st most likes" once
+      cy.get(".blog").eq(1).contains("show").click();
+      cy.get(".blog").eq(1).get(".blog-like-btn").click();
+
+      // the order should be switched now
+      cy.get(".blog").should("have.length", 2);
+      cy.get(".blog").eq(0).contains("1st most likes");
+      cy.get(".blog").eq(1).contains("2nd most likes");
+    });
   });
 });
