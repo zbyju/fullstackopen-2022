@@ -24,6 +24,8 @@ const reducer = (state = initialState, action) => {
   console.log("action", action);
 
   switch (action.type) {
+    case "ADD_ANECDOTE":
+      return state.concat(action.data.anecdote);
     case "ADD_VOTE":
       return state.map((a) => {
         if (a.id === action.data.id) {
@@ -41,6 +43,20 @@ export const addVote = (id) => {
     type: "ADD_VOTE",
     data: {
       id,
+    },
+  };
+};
+
+export const addAnecdote = (formAnecdote) => {
+  const anecdote = {
+    ...formAnecdote,
+    votes: 0,
+    id: getId(),
+  };
+  return {
+    type: "ADD_ANECDOTE",
+    data: {
+      anecdote,
     },
   };
 };
