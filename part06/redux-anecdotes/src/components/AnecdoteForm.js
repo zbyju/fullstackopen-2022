@@ -11,8 +11,7 @@ const AnecdoteForm = () => {
       content: e.target.content.value,
     };
     e.target.content.value = "";
-    const newAnecdote = await anecdoteService.createNew(anecdote);
-    dispatch(createAnecdote(newAnecdote));
+    dispatch(createAnecdote(anecdote));
   };
 
   return (
