@@ -18,11 +18,15 @@ const notificationSlice = createSlice({
 export const { createNotification, deleteNotification } =
   notificationSlice.actions;
 
+let timeout;
+
 export const setNotification = (text, time) => {
+  if (timeout) clearTimeout(timeout);
   return async (dispatch) => {
     dispatch(createNotification(text));
-    setTimeout(() => {
+    timeout = setTimeout(() => {
       dispatch(deleteNotification());
+      timeout = undefined;
     }, time * 1000);
   };
 };
